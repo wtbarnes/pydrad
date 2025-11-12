@@ -547,7 +547,7 @@ Timestep #: {self._index}"""
         """
         if hasattr(self, '_phy_data'):
             return self._phy_data['electron_pressure']
-        return self.electron_energy_density / (pydrad.util.constants.gamma - 1)
+        return self.electron_energy_density * (pydrad.util.constants.gamma - 1)
 
     @property
     @u.quantity_input

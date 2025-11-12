@@ -80,6 +80,16 @@ def strand_only_amr(hydrad):
                   read_scl=False)
 
 
+@pytest.fixture
+def strand_phy(hydrad):
+    return Strand(hydrad,
+                  read_phy=True,
+                  read_ine=False,
+                  read_trm=False,
+                  read_hstate=False,
+                  read_scl=False)
+
+
 def test_parse_initial_conditions(strand):
     assert hasattr(strand, 'initial_conditions')
 
@@ -213,3 +223,18 @@ def test_ine_results(strand):
                 assert hasattr(profile, f'{element}_{i_z}')
                 ion_frac = getattr(profile, f'{element}_{i_z}')
                 assert ion_frac.shape == profile.coordinate.shape
+
+
+@pytest.mark.parametrize('property',[
+        'velocity',
+        'hydrogen_density',
+        'electron_density',
+        'electron_pressure',
+        'hydrogen_pressure',
+        'electron_temperature',
+        'hydrogen_temperature',
+])
+def test_phy_amr_consistency(property, strand_only_amr, strand_phy):
+    # Check consistency between properties derived from different file types
+    for p_amr,p_phy in zip(strand_only_amr, strand_phy):
+        assert u.allclose(getattr(p_amr, property), getattr(p_phy, property), rtol=5e-3)
