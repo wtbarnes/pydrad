@@ -237,4 +237,13 @@ def test_ine_results(strand):
 def test_phy_amr_consistency(property, strand_only_amr, strand_phy):
     # Check consistency between properties derived from different file types
     for p_amr,p_phy in zip(strand_only_amr, strand_phy):
-        assert u.allclose(getattr(p_amr, property), getattr(p_phy, property), rtol=5e-3)
+        assert u.allclose(getattr(p_amr, property), getattr(p_phy, property), rtol=5e-4)
+
+
+def test_electron_hydrogen_initial_equilibrium(strand_only_amr, strand_phy):
+    # The electron and hydrogen temperatures should be the same at the first
+    # timestep because no heating has occurred to drive them out of equilibrium.
+    assert u.allclose(strand_only_amr[0].electron_temperature,
+                      strand_only_amr[0].hydrogen_temperature)
+    assert u.allclose(strand_phy[0].electron_temperature,
+                      strand_phy[0].hydrogen_temperature)
