@@ -12,7 +12,6 @@ import shutil
 import stat
 import tempfile
 
-from distutils.dir_util import copy_tree
 from jinja2 import ChoiceLoader, DictLoader, Environment, PackageLoader
 
 from pydrad.configure import filters
@@ -101,7 +100,7 @@ class Configure:
         with tempfile.TemporaryDirectory() as tmpdir:
             # NOTE: this is all done in a temp directory and then copied over
             # so that if something fails, all the files are cleaned up
-            copy_tree(base_path, tmpdir)
+            shutil.copytree(base_path, tmpdir)
             if run_initial_conditions:
                 execute = kwargs.get('execute', True)
                 self.setup_initial_conditions(tmpdir, execute=execute)
