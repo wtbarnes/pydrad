@@ -100,7 +100,7 @@ class Configure:
         with tempfile.TemporaryDirectory() as tmpdir:
             # NOTE: this is all done in a temp directory and then copied over
             # so that if something fails, all the files are cleaned up
-            shutil.copytree(base_path, tmpdir)
+            shutil.copytree(base_path, tmpdir, dirs_exist_ok=True)
             if run_initial_conditions:
                 execute = kwargs.get('execute', True)
                 self.setup_initial_conditions(tmpdir, execute=execute)
